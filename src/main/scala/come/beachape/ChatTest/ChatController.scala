@@ -11,7 +11,6 @@ import org.atmosphere.cpr.RedisScalatraBroadcasterConfig
 
 import scala.concurrent._
 import ExecutionContext.Implicits.global
-import java.net.URI
 
 class ChatController extends ScalatraServlet
   with ScalateSupport
@@ -22,7 +21,7 @@ class ChatController extends ScalatraServlet
 
   implicit val jsonFormats = DefaultFormats
 
-  override val broadcasterConfig = RedisScalatraBroadcasterConfig(URI.create("redis://127.0.0.1:6379"), Some("foobared"))
+//  override val broadcasterConfig = RedisScalatraBroadcasterConfig()
 
   get("/") {
     contentType="text/html"
@@ -48,6 +47,7 @@ class ChatController extends ScalatraServlet
           val msg = json merge (("time" -> (new Date().getTime().toString)): JValue)
           broadcast(msg) // by default a broadcast is to everyone but self
         }
+        case x @ _ => println(s"wut ${x}")
       }
     }
   }
